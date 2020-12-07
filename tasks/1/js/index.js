@@ -1,10 +1,12 @@
+'use strict'
+
 document.querySelector('body').onload = () => {
 
     function main() {
         const canvas = document.querySelector('#canvas');
         const renderer = new THREE.WebGLRenderer({canvas});
 
-        const fov = 75;    // поле зрения в градусах
+        const fov = 70;    // поле зрения в градусах (field of view, поле зрения)
         const aspect = 1;  // соотношение сторон холста
         const near = 0.1;  // пространство перед камерой
         const far = 5;     // пространство перед камерой
@@ -23,8 +25,22 @@ document.querySelector('body').onload = () => {
         const boxDepth = 1;
         const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
 
+        // создать направленный свет
+        // Направленные источники имеет положение и цель. Оба по умолчанию равны 0, 0, 0
+        {
+            const color = 0xFFFFFF;
+            const intensity = 2;
+            const light = new THREE.DirectionalLight(color, intensity);
+            light.position.set(-1, 2, 4);
+            scene.add(light);
+        }
+
+
         // создаем основной материал и устанавливаем его цвет
-        const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
+        // const material = new THREE.MeshBasicMaterial({color: 0x770045});
+
+        // меняем материал на блестящий
+        const material = new THREE.MeshPhongMaterial({color: 0x770045});
 
         /*
           Затем мы создаем полигональную сетку Mesh.
@@ -39,6 +55,19 @@ document.querySelector('body').onload = () => {
 
         // отрендерить сцену, вызвав функцию render рендерера передав ей сцену и камеру.
         renderer.render(scene, camera);
+
+        function render(time) {
+            time *= 0.0001;  // конвертировать время в секунды
+
+            cube.rotation.x = Math.sin(time) * 5 // вращение в радианах
+            cube.rotation.y = Math.sin(time) * 5 // вращение в радианах
+
+            renderer.render(scene, camera);
+
+            requestAnimationFrame(render);
+        }
+        render()
+
     }
 
     main();
