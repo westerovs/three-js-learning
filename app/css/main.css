@@ -35,7 +35,7 @@ a {
 }
 
 .title {
-    margin-bottom: 35px;
+    margin-bottom: 15px;
     text-align: center;
     color: tomato;
     text-shadow: 2px 2px 10px black;
@@ -74,6 +74,6 @@ a {
 }
 
 #canvas {
-    outline: 2px solid black;
+    outline: 2px solid gray;
     align-self: center;
 }

@@ -1,30 +1,23 @@
 const links = document.querySelectorAll('.link')
 
 links.forEach((link, index) => {
-    switch (index) {
-        case 0:
-            link.addEventListener('pointerdown', () => {
-                console.log(index)
-                createScript(1)
-            })
-            break
-        case 1:
-            link.addEventListener('pointerdown', () => {
-                console.log(index)
-                createScript(1.1)
-            })
-            break
-    }
+    link.addEventListener('pointerdown', () => {
+        createScript(index)
+    })
 })
 
-// костыль
+// костыль ! утечка памяти !
 function createScript(source) {
     const script = document.createElement('script')
     script.src = `tasks/${source}.js`
+    script.classList.add('task-script')
 
     document.querySelector('body').append(script)
-
-    setTimeout(() => script.remove(), 100)
+    setTimeout(() => {
+        if (script.classList.contains('task-script')) {
+            script.remove()
+        }
+    }, 100)
 }
 
-createScript(1.1)
+createScript(2)
