@@ -25,4 +25,4 @@ function createScript(source) {
     document.querySelector('body').append(script)
 }
 
-createScript(2)
+createScript(3)
