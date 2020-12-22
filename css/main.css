@@ -25,7 +25,8 @@ a {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: 1000px;
+    /*min-width: 400px;*/
+    /*max-width: 1000px;*/
     padding: 20px 30px;
 }
 
@@ -69,5 +70,6 @@ a {
 }
 
 #canvas {
+    order: -1;
     outline: 2px solid gray;
 }

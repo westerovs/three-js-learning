@@ -1,4 +1,4 @@
-import * as THREE from '../three-lib.js';
+import * as THREE from '../../lib/three-lib.js';
 
 function main() {
     const canvas = document.querySelector('#canvas');

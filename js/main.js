@@ -19,10 +19,10 @@ function createScript(source) {
     }, 100)
 
     script.setAttribute('type', 'module')
-    script.src = `tasks/${source}.js`
+    script.src = `js/tasks/${source}.js`
     script.classList.add('task-script')
 
     document.querySelector('body').append(script)
 }
 
-// createScript(4)
+createScript(4)
