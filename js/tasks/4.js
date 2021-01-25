@@ -19,9 +19,44 @@ const canvas = document.querySelector('#canvas')
 const width  = canvas.offsetWidth
 const height = canvas.offsetHeight
 
+const renderer = new THREE.WebGLRenderer({ canvas })
+const scene    = new THREE.Scene()
+const camera   = new THREE.PerspectiveCamera(45, width / height, 1, 5000)
+
+// настройки
+renderer.setClearColor(0x434323)
+camera.position.set(0, 0, 330)
+
+function createSphere() {
+    const sphere   = new THREE.SphereGeometry(100, 20, 20, 40)
+    const material = new THREE.MeshBasicMaterial()
+    const mesh     = new THREE.Mesh(sphere, material)
+    // const light    = new THREE.AmbientLight({ color: 0x000000 })
+
+    scene.add(mesh)
+}
+
+createSphere()
+
+renderer.render(scene, camera)
+
+
+
+
+
+
+
+
+
+
+
+
+// 2
+/*
 const renderer = new THREE.WebGLRenderer({canvas})
 const scene    = new THREE.Scene()
 const camera   = new THREE.PerspectiveCamera(45, width / height, 0.1, 5000)
+
 
 renderer.setClearColor(0x393485)
 
@@ -38,15 +73,8 @@ sphere()
 
 camera.position.set(0, 0, 1000)
 renderer.render(scene, camera)
-
-
-
-
-
-
-
-
-
+*
+* */
 
 
 
