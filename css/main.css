@@ -64,6 +64,10 @@ a {
     transition: 0.2s;
 }
 
+.link.active {
+    color: tomato;
+}
+
 .link:hover {
     color: tomato;
     text-shadow: 1px 1px 5px black;
