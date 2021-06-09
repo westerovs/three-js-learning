@@ -31,13 +31,12 @@ function createScript(index) {
     script.classList.add('task-script')
     
     document.querySelector('body').append(script)
-    
-    // setTimeout(() => {
-    //     if (script.classList.contains('task-script')) {
-    //         script.remove()
-    //         script = null
-    //     }
-    // }, 100)
+    setTimeout(() => {
+        if (script.classList.contains('task-script')) {
+            script.remove()
+            script = null
+        }
+    }, 100)
 }
 
 init()
