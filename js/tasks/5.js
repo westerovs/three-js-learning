@@ -5,7 +5,12 @@ const game = new function() {
     const game = this
     const scene = new THREE.Scene();
     const renderer = new THREE.WebGLRenderer({canvas});
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+    );
     const keys = {}
     const events = {
         'keydown': null,
@@ -43,15 +48,12 @@ const game = new function() {
         requestAnimationFrame( animate );
     }
     
-    const addCamera = this.addCamera = () => {
-        // console.log('addCamera')
-    }
-    
     this.init = () => {
         // document.body.appendChild( renderer.domElement );
         renderer.render(scene, camera);
         
-        renderer.setSize( window.innerWidth, window.innerHeight );
+        // размер рендера
+        // renderer.setSize( window.innerWidth, window.innerHeight );
         animate();
         
         window.addEventListener('keydown', (e) => {

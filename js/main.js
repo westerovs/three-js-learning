@@ -4,7 +4,7 @@ const clearClass = (element, className = 'active') => {
     element.forEach(item => item.classList.remove(className))
 }
 
-function init(startItem = 0) {
+function init(startItem = 5) {
     createScript(startItem)
     
     links.forEach((link, index) => {
