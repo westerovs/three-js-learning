@@ -1,88 +1,80 @@
 import * as THREE from "../../lib/three-lib.js";
 
-const game = new function() {
-    const canvas = document.querySelector('#canvas');
-    const game = this
-    const scene = new THREE.Scene();
-    const renderer = new THREE.WebGLRenderer({canvas});
-    const camera = new THREE.PerspectiveCamera(
-        75,
-        window.innerWidth / window.innerHeight,
-        0.1,
-        1000
-    );
-    const keys = {}
-    const events = {
-        'keydown': null,
-        'keypress': null,
-        'keyup': null,
-    }
-    
-    game.on = (eventName, processor) => {
-        events[eventName] = processor
-    }
-    
-    const callEvent = (evt, args) => {
-        if (events[evt]) events[evt](args)
-    }
-    
-    const addCube = this.addCube = (x, y, z) => {
-        const geometry = new THREE.BoxGeometry();
-        const material = new THREE.MeshBasicMaterial({ color: 'gray' });
-        const cube     = new THREE.Mesh(geometry, material);
+class Game {
+    constructor() {
+        this.canvas = document.querySelector('#canvas');
+        this.scene    = new THREE.Scene();
+        this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
+        this.camera   = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        this.speedCamera = 0.05
         
+        this.objKeys = {}
+        this.gameEvents = {
+            'keydown': null,
+            'keyup': null,
+        }
+    }
+    
+    gameEventListener = (eventName, processor) => {
+        this.gameEvents[eventName] = processor
+    }
+    
+    getCamera = (x= 0, y= 1, z = 3) => {
+        return this.camera.position.set(x, y, z)
+    }
+    
+    createCube = (x, y, z, color = 'gray') => {
+        const geometry = new THREE.BoxGeometry()
+        const material = new THREE.MeshBasicMaterial({ color })
+        const cube     = new THREE.Mesh(geometry, material)
+      
         cube.position.set(x, y, z)
-        scene.add(cube);
+        this.scene.add(cube)
         return cube
     }
     
-    game.getCamera = () => {
-        return camera
+    animate = () => {
+        if (this.gameEvents.keydown) this.gameEvents.keydown(this.objKeys)
+        
+        this.renderer.render(this.scene, this.camera);
+        requestAnimationFrame(this.animate);
     }
+
+    init = () => {
+        this.renderer.render(this.scene, this.camera);
     
-    const animate = () => {
-        if (events.keydown) events.keydown(keys)
-        
-        renderer.render( scene, camera );
-        requestAnimationFrame( animate );
-    }
+        this.animate()
+        this.getCamera()
     
-    this.init = () => {
-        // document.body.appendChild( renderer.domElement );
-        renderer.render(scene, camera);
-        
-        // размер рендера
-        // renderer.setSize( window.innerWidth, window.innerHeight );
-        animate();
-        
-        window.addEventListener('keydown', (e) => {
-            keys[e.code] = true
-            callEvent('keypress', keys)
+        this.gameEventListener('keydown', (event) => {
+            if (event.KeyA) game.getCamera().position.x += this.speedCamera
+            if (event.KeyD) game.getCamera().position.x -= this.speedCamera
+            if (event.KeyW) game.getCamera().position.y -= this.speedCamera
+            if (event.KeyS) game.getCamera().position.y += this.speedCamera
+            if (event.KeyQ) game.getCamera().position.z += this.speedCamera
+            if (event.KeyE) game.getCamera().position.z -= this.speedCamera
         })
         
-        window.addEventListener('keyup', (e) => {
+        window.addEventListener('keydown', (event) => {
+            this.objKeys[event.code] = true
+        })
+
+        window.addEventListener('keyup', (event) => {
             // что бы знать что клавиша была ранее нажата
-            keys[e.code] = false
-            callEvent('keyup', keys)
+            this.objKeys[event.code] = false
         })
+        
     }
 }
 
-const SPPED_CAMERA = 0.05
-
+const game = new Game()
 game.init()
-
-game.addCube(0.1, 1, 2)
-game.addCube(2.1, 1, 2)
-
-game.getCamera().position.z = 5
-
-game.on('keydown', (keys) => {
-    console.log(keys)
-    if (keys.KeyA) game.getCamera().position.x += SPPED_CAMERA
-    if (keys.KeyD) game.getCamera().position.x -= SPPED_CAMERA
-    if (keys.KeyW) game.getCamera().position.y -= SPPED_CAMERA
-    if (keys.KeyS) game.getCamera().position.y += SPPED_CAMERA
-    if (keys.KeyQ) game.getCamera().position.z += SPPED_CAMERA
-    if (keys.KeyE) game.getCamera().position.z -= SPPED_CAMERA
-})
+game.createCube(-1.2, 0, 0)
+game.createCube(1.2, 0, 0)
+game.createCube(0, 0, 0, '#202124')
+game.createCube(0, 1, 0, '#202124')
