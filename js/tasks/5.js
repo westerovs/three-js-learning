@@ -9,7 +9,7 @@ class Game {
         this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
         this.camera   = new THREE.PerspectiveCamera(
             75,
-            window.innerWidth / window.innerHeight,
+            this.canvas.offsetWidth / this.canvas.offsetHeight,
             0.1,
             1000
         );
