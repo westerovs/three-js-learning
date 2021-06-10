@@ -1,5 +1,6 @@
-console.log('Запущено: Лаврик - работа со сценой')
 import * as THREE from '../../lib/three-lib.js';
+
+console.log('Task IV')
 
 /*
     ИЕРАРХИЯ ОТОБРАЖЕНИЯ:

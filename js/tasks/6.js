@@ -1,6 +1,6 @@
 import * as THREE from "../../lib/three-lib.js";
 
-console.log('Task V')
+console.log('Task VI')
 
 class Game {
     constructor() {

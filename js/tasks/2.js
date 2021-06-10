@@ -1,5 +1,7 @@
 import * as THREE from '../../lib/three-lib.js';
 
+console.log('Task II')
+
 function main() {
     const canvas = document.querySelector('#canvas');
     const renderer = new THREE.WebGLRenderer({canvas});
