@@ -40,7 +40,6 @@ class Game {
     }
     
     getCamera = () => {
-        // return this.camera.position.set(x, y, z)
         return this.camera
     }
     
@@ -92,6 +91,7 @@ class Game {
                 event.preventDefault()
                 this.gameMouse.mouseKeys[this.MOUSE_BUTTONS[event.button]] = false
             })
+            
             window.addEventListener('mousedown', (event) => {
                 event.preventDefault()
                 this.gameMouse.mouseKeys[this.MOUSE_BUTTONS[event.button]] = true
