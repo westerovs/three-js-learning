@@ -16,13 +16,13 @@ class Game {
         this.speedCamera = 0.05
         
         this.objKeys = {}
-        this.gameBtnEvents = {
+        this.gameBtns = {
             keydown: null,
             keyup: null,
         }
         
         this.MOUSE_BUTTONS = ['left', 'middle', 'right']
-        this.gameMouseEvents = {
+        this.gameMouse = {
             position: { x: 0, y: 0 },
             speed: { x: 0, y: 0 },
             locked: false,
@@ -36,7 +36,7 @@ class Game {
     }
     
     gameEventListener = (eventName, processor) => {
-        this.gameBtnEvents[eventName] = processor
+        this.gameBtns[eventName] = processor
     }
     
     getCamera = () => {
@@ -55,7 +55,7 @@ class Game {
     }
     
     animate = () => {
-        if (this.gameBtnEvents.keydown) this.gameBtnEvents.keydown(this.objKeys)
+        if (this.gameBtns.keydown) this.gameBtns.keydown(this.objKeys)
         
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame(this.animate);
@@ -64,13 +64,13 @@ class Game {
     initCaptureKeys = (settings) => {
         if (settings.captureKeys) {
             this.gameEventListener('keydown', (event) => {
-                if (event.KeyA) game.getCamera().position.x += this.speedCamera
-                if (event.KeyS) game.getCamera().position.y += this.speedCamera
-                if (event.KeyQ) game.getCamera().position.z += this.speedCamera
+                if (event.KeyA) game.getCamera().translateX(this.speedCamera)
+                if (event.KeyS) game.getCamera().translateY(this.speedCamera)
+                if (event.KeyQ) game.getCamera().translateZ(this.speedCamera)
             
-                if (event.KeyW) game.getCamera().position.y -= this.speedCamera
-                if (event.KeyD) game.getCamera().position.x -= this.speedCamera
-                if (event.KeyE) game.getCamera().position.z -= this.speedCamera
+                if (event.KeyW) game.getCamera().translateY(-this.speedCamera)
+                if (event.KeyD) game.getCamera().translateX(-this.speedCamera)
+                if (event.KeyE) game.getCamera().translateZ(-this.speedCamera)
             })
         
             window.addEventListener('keydown', (event) => {
@@ -86,19 +86,20 @@ class Game {
     
     initCaptureMouse = (settings) => {
         window.addEventListener('contextmenu', (event) => event.preventDefault())
-        
-        if (settings.captureMouse) {
-            window.addEventListener('mousedown', (event) => {
-                console.log(event.button)
-                this.gameMouseEvents.mouseKeys[this.MOUSE_BUTTONS[event.button]] = true
-            })
-        }
+    
         if (settings.captureMouse) {
             window.addEventListener('mouseup', (event) => {
-                // console.log(event.button)
-                console.log(this.gameMouseEvents.mouseKeys)
-                
-                this.gameMouseEvents.mouseKeys[this.MOUSE_BUTTONS[event.button]] = false
+                event.preventDefault()
+                this.gameMouse.mouseKeys[this.MOUSE_BUTTONS[event.button]] = false
+            })
+            window.addEventListener('mousedown', (event) => {
+                event.preventDefault()
+                this.gameMouse.mouseKeys[this.MOUSE_BUTTONS[event.button]] = true
+            })
+            
+            window.addEventListener('mousemove', (event) => {
+                this.getCamera().rotateX(this.gameMouse.speed.x -= 0.00001)
+                this.getCamera().rotateY(this.gameMouse.speed.y -= 0.00001)
             })
         }
     }
@@ -108,7 +109,7 @@ class Game {
     
         this.animate()
         this.getCamera()
-        game.getCamera().position.z = 3
+        this.getCamera().position.z = 3
 
         this.initCaptureKeys(settings)
         this.initCaptureMouse(settings)
