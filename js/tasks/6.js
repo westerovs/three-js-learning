@@ -16,14 +16,27 @@ class Game {
         this.speedCamera = 0.05
         
         this.objKeys = {}
-        this.gameEvents = {
-            'keydown': null,
-            'keyup': null,
+        this.gameBtnEvents = {
+            keydown: null,
+            keyup: null,
+        }
+        
+        this.MOUSE_BUTTONS = ['left', 'middle', 'right']
+        this.gameMouseEvents = {
+            position: { x: 0, y: 0 },
+            speed: { x: 0, y: 0 },
+            locked: false,
+            mouseKeys: {
+                left: false,
+                right: false,
+                middle: false,
+                wheel: 0
+            }
         }
     }
     
     gameEventListener = (eventName, processor) => {
-        this.gameEvents[eventName] = processor
+        this.gameBtnEvents[eventName] = processor
     }
     
     getCamera = () => {
@@ -42,43 +55,72 @@ class Game {
     }
     
     animate = () => {
-        if (this.gameEvents.keydown) this.gameEvents.keydown(this.objKeys)
+        if (this.gameBtnEvents.keydown) this.gameBtnEvents.keydown(this.objKeys)
         
         this.renderer.render(this.scene, this.camera);
         requestAnimationFrame(this.animate);
     }
-
-    init = () => {
+    
+    initCaptureKeys = (settings) => {
+        if (settings.captureKeys) {
+            this.gameEventListener('keydown', (event) => {
+                if (event.KeyA) game.getCamera().position.x += this.speedCamera
+                if (event.KeyS) game.getCamera().position.y += this.speedCamera
+                if (event.KeyQ) game.getCamera().position.z += this.speedCamera
+            
+                if (event.KeyW) game.getCamera().position.y -= this.speedCamera
+                if (event.KeyD) game.getCamera().position.x -= this.speedCamera
+                if (event.KeyE) game.getCamera().position.z -= this.speedCamera
+            })
+        
+            window.addEventListener('keydown', (event) => {
+                this.objKeys[event.code] = true
+            })
+        
+            window.addEventListener('keyup', (event) => {
+                // что бы знать что клавиша была ранее нажата
+                this.objKeys[event.code] = false
+            })
+        }
+    }
+    
+    initCaptureMouse = (settings) => {
+        window.addEventListener('contextmenu', (event) => event.preventDefault())
+        
+        if (settings.captureMouse) {
+            window.addEventListener('mousedown', (event) => {
+                console.log(event.button)
+                this.gameMouseEvents.mouseKeys[this.MOUSE_BUTTONS[event.button]] = true
+            })
+        }
+        if (settings.captureMouse) {
+            window.addEventListener('mouseup', (event) => {
+                // console.log(event.button)
+                console.log(this.gameMouseEvents.mouseKeys)
+                
+                this.gameMouseEvents.mouseKeys[this.MOUSE_BUTTONS[event.button]] = false
+            })
+        }
+    }
+    
+    init = (settings) => {
         this.renderer.render(this.scene, this.camera);
     
         this.animate()
         this.getCamera()
         game.getCamera().position.z = 3
 
-        this.gameEventListener('keydown', (event) => {
-            if (event.KeyA) game.getCamera().position.x += this.speedCamera
-            if (event.KeyS) game.getCamera().position.y += this.speedCamera
-            if (event.KeyQ) game.getCamera().position.z += this.speedCamera
-            
-            if (event.KeyW) game.getCamera().position.y -= this.speedCamera
-            if (event.KeyD) game.getCamera().position.x -= this.speedCamera
-            if (event.KeyE) game.getCamera().position.z -= this.speedCamera
-        })
-        
-        window.addEventListener('keydown', (event) => {
-            this.objKeys[event.code] = true
-        })
-
-        window.addEventListener('keyup', (event) => {
-            // что бы знать что клавиша была ранее нажата
-            this.objKeys[event.code] = false
-        })
-        
+        this.initCaptureKeys(settings)
+        this.initCaptureMouse(settings)
+    
     }
 }
 
 const game = new Game()
-game.init()
+game.init({
+    captureKeys: true,
+    captureMouse: true,
+})
 
 game.createCube(-1.2, 0, 0)
 game.createCube(1.2, 0, 0)
