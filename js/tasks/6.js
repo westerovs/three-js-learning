@@ -26,8 +26,9 @@ class Game {
         this.gameEvents[eventName] = processor
     }
     
-    getCamera = (x= 0, y= 1, z = 3) => {
-        return this.camera.position.set(x, y, z)
+    getCamera = () => {
+        // return this.camera.position.set(x, y, z)
+        return this.camera
     }
     
     createCube = (x, y, z, color = 'gray') => {
@@ -52,13 +53,15 @@ class Game {
     
         this.animate()
         this.getCamera()
+        game.getCamera().position.z = 3
 
         this.gameEventListener('keydown', (event) => {
             if (event.KeyA) game.getCamera().position.x += this.speedCamera
-            if (event.KeyD) game.getCamera().position.x -= this.speedCamera
-            if (event.KeyW) game.getCamera().position.y -= this.speedCamera
             if (event.KeyS) game.getCamera().position.y += this.speedCamera
             if (event.KeyQ) game.getCamera().position.z += this.speedCamera
+            
+            if (event.KeyW) game.getCamera().position.y -= this.speedCamera
+            if (event.KeyD) game.getCamera().position.x -= this.speedCamera
             if (event.KeyE) game.getCamera().position.z -= this.speedCamera
         })
         
@@ -76,6 +79,7 @@ class Game {
 
 const game = new Game()
 game.init()
+
 game.createCube(-1.2, 0, 0)
 game.createCube(1.2, 0, 0)
 game.createCube(0, 0, 0, '#202124')
